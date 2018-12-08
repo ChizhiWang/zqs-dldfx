@@ -43,13 +43,13 @@
 			var pn = document.getElementById('pn'+(i+1)).value;
 			var rname = document.getElementById('rname'+(i+1)).value;
 	
-			document.getElementById('hint'+(i+1)).innerHTML += md5ans + "<br/>";//test
+			document.getElementById('hint'+(i+1)).innerHTML += md5ans + "<br/>";//test; to show md5 of ans
 			//for(t=0;t<10;t++)
 			//	md5ans = hex_md5(md5ans);
-			//document.getElementById('test').innerHTML += md5ans + "<br/>";//test
+			//document.getElementById('test').innerHTML += md5ans + "<br/>";//test; to generate th[]
 			var j = pn[2]-1;
 			var k = rname;
-			//gen_index(md5ans, i, j, k); 
+			//gen_index(md5ans, i, j, k); //test
 			if(md5ans == "d41d8cd98f00b204e9800998ecf8427e"){
 				document.getElementById('hint'+(i+1)).innerHTML = "X"  + "<br/>";//fail
 				document.getElementById('hint'+(i+1)).style.color = "red";
