@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset = 'utf-8'>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="md5.js"></script>
+	<script type="text/javascript">
+		var hp = new Array();//hint的位置hp[i][j][k]照片i-j在k路上
+		for(i=0;i<5;i++){
+			hp[i] = new Array();
+			for(j=0;j<5;j++){
+				hp[i][j] = new Array(0, 0, 0, 0, 0);
+		
+			}
+		}
+		hp[0][0][4]=26;
+		hp[0][1][1]=29;
+		hp[1][0][1]=3;
+		hp[1][1][1]=1;
+		hp[2][0][3]=6;
+		hp[2][1][0]=3;
+		hp[3][0][5]=5;
+		hp[3][1][5]=23;
+		hp[4][0][0]=4;
+		hp[4][1][2]=0;
+		hp[0][2][1]=17;
+		hp[1][2][4]=10;
+		hp[2][2][3]=26;
+		hp[3][2][1]=18;
+		hp[4][2][0]=1;
+		
+		var th = new Array();//true hint md5
+		th[0] = "eef9fe9bdf4224938ca2218bc681f066";
+		th[1] = "349fbf09e7b49f408f4d7a76dcf113f9";
+		th[2] = "0d436af752b176353ebf7bf7e1752fca";
+		th[3] = "1b55aebe7f7c1292ebf39a636dc2b50f";
+		th[4] = "6d08cd5edf63248db07a083a3e039415";
+
+		function hint(i){
+			var ans = document.getElementById('rn'+(i+1)).value;
+			var md5ans = hex_md5(ans);//hash
+			var pn = document.getElementById('pn'+(i+1)).value;
+			var rname = document.getElementById('rname'+(i+1)).value;
+	
+			document.getElementById('hint'+(i+1)).innerHTML += md5ans + "<br/>";//test
+			//for(t=0;t<10;t++)
+			//	md5ans = hex_md5(md5ans);
+			//document.getElementById('test').innerHTML += md5ans + "<br/>";//test
+			var j = pn[2]-1;
+			var k = rname;
+			//gen_index(md5ans, i, j, k); 
+			if(md5ans == "d41d8cd98f00b204e9800998ecf8427e"){
+				document.getElementById('hint'+(i+1)).innerHTML = "X"  + "<br/>";//fail
+				document.getElementById('hint'+(i+1)).style.color = "red";
+			}
+			else{
+				validate(md5ans[hp[i][j][k]], i, j, k);
+			}
+		}
+		
+		function gen_index(md5ans, i, j, k) {//temp use to generate index
+			var desired = "d5406";
+			for (t=0;t<50;t++) {
+				if (md5ans[t] == desired[i]){
+					hp[i][j][k] = t;
+					document.getElementById('testhint').innerHTML += "hp[" + i + "][" + j + "][" + k + "]=" + hp[i][j][k] + ";<br/>";
+					break;
+				}	
+			}
+		}
+		function validate(hint, i, j, k){
+			var h = hint;
+			for(t=0;t<10;t++){
+				h = hex_md5(h);
+			}
+			if (hex_md5(h) == th[i]){
+				document.getElementById('hint'+(i+1)).innerHTML = hint + "<br/>";//show hint
+				document.getElementById('hint'+(i+1)).style.color = "black";
+			}
+			else{
+				document.getElementById('hint'+(i+1)).innerHTML = "X"  + "<br/>";//fail
+				document.getElementById('hint'+(i+1)).style.color = "red";
+			}
+		}
+		/*function imgerror(i){//to deal with failure of img load
+			var p = document.getElementById('tp'+i);
+			var parent = document.getElementById('title');
+			parent.removeChild(p);
+			var node = document.createTextNode("Running USTCer之地理大发现");
+			var newh = document.createElement("h1");
+			newh.appendChild(node);
+			newh.style = "margin-top:5%;margin-bottom:5%;text-align:center;color:white;";
+			parent.appendChild(newh);
+		}*/
+	</script>
+	<style type="text/css">
+		h1{
+			text-align:center;
+			font-size:20px;
+		}
+		.p1{
+			font-size:16px;
+		}
+		.p2{
+			font-size:14px;
+		}
+		.title{
+			padding-left:5%;
+			padding-right:5%;
+		}
+		.content{
+			background-color:white;
+			margin:2.5% 2.5% 2.5% 2.5%;
+			padding:2.5% 2.5% 2.5% 2.5%;
+			border-radius:5%;
+		}
+		.foot{
+			padding-top:1%;
+			padding-bottom:`1%;
+			text-align:center;
+		}
+		table{
+			border-collapse:collapse;
+		}
+		table,th,td{
+			border:1px solid black;
+		}
+		th,td{
+			text-align:center;
+			padding:2px;
+		}
+		p>red{
+			color:red;
+		}
+		h2{
+			text-align:center;
+		}
+	</style>
+	<title>Running USTCer 地理大发现(内部测试版)</title>
+</head>
+
+<body style="background-color:rgb(235,45,71)">
+	<div class="title" id="title">
+		<p id="tp1" class="hidden-sm hidden-md hidden-lg" style="text-align:center;color:white;font-size:16px;"><img id="img1" src="title.jpg" alt="Running USTCer之地理大发现" width="80%"></p>
+		<p id="tp2" class="hidden-xs" style="text-align:left;color:white;font-size:16px;"><img id="img2" src="title.jpg" alt="Running USTCer之地理大发现" width="20%"></p>
+	</div>
+	<!--游戏规则介绍-->
+	<div id="rule" class="content">
+		<p class="p1"><b>地理大发现游戏规则:</b></p>
+		<p class="p2">&emsp;&emsp;在五个小游戏中,参赛队员将获得5张照片(每张照片上有照片编号)。
+			参赛队员需在科大周边找到照片对应地点,并在前面合影留念。
+			同时,参赛队员在网页上选择照片编号,地点所在的路名,输入门牌号,可获得关于决赛地点的线索。
+			参赛队员需在17:30(可根据情况改变)之前找到所有地点。超时后若仍有队伍未到达参赛场地,则以QQ或短信方式通知队长决赛地点。
+		</p>
+	</div>
+	<div style="color:white" >
+		<p id="test"></p>
+		<p id="testhint"></p>
+	</div>
+	<!--正确地址-->
+	<div id="key" class="content">
+		<p class="p1"><b>正确地点（没有地图情况下只有10个地点233333）</b>:(决赛地点是5406)</p>
+			<table id="keytable">
+			<tr>
+				<th>hint1</th>
+				<td>1-1杭州混沌：太湖支路69号</td>
+				<td>1-2川人川菜馆：黄山路421号</td>
+				<td>1-3黄山路：编号1</td>
+			</tr>
+			<tr>
+				<th>hint2</th>
+				<td>2-1贾不假包子店：黄山路439号</td>
+				<td>2-2金地造型：黄山路313号</td>
+				<td>2-3太湖支路：编号3</td>
+			</tr>
+			<tr>
+				<th>hint3</th>
+				<td>3-1兰州拉面：宿松路106号</td>
+				<td>3-2牛牛大签烤肉：金寨路71号</td>
+				<td>3-3宿松路：编号4</td>
+			</tr>
+			<tr>
+				<th>hint4</th>
+				<td>4-1牛骨粉面馆：肥西路百盛苑1112幢109号</td>
+				<td>4-2无锡汤包：肥西路441号</td>
+				<td>4-3黄山路：编号2</td>
+			</tr>
+			<tr>
+				<th>hint5</th>
+				<td>5-1马店羊汤馆：金寨路59号</td>
+				<td>5-2瑞辣火锅：太湖路111号</td>
+				<td>5-3金寨路：编号6</td>
+			</tr>
+			</table>
+	</div>
+	<!--回答区-->
+	<div id="ans" class="content">
+		<p class="p2">&emsp;&emsp;请在下面对于区域选择照片编号,路名,并输入门牌号,获得线索!（找到正确地点，将会给出线索，否则会显示<red>X</red>）</p>
+		<table id="anstable">
+		<tr>
+			<th>照片编号</th>
+			<th>路名</th>
+			<th>门牌号</th>
+			<th>提交</th>
+			<th>线索</th>
+		</tr>
+		<!--~~~~~~~~~~~~~~~~~~~~~~pic1~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+		<tr>
+			<td class="pn">
+				<select id="pn1">
+					<option value="1-1">1-1</option>
+					<option value="1-2">1-2</option>
+					<option value="1-3">1-3</option>
+					<option value="1-4">1-4</option>
+					<option value="1-5">1-5</option>
+				</select>
+			</td>
+			<td class="rname">
+				<select id="rname1">
+					<option value="0">金寨路</option>
+					<option value="1">黄山路</option>
+					<option value="2">太湖路</option>
+					<option value="3">宿松路</option>
+					<option value="4">太湖支路</option>
+					<option value="5">肥西路</option>
+				</select>
+			</td>
+			<td class="inputbox">
+				<input type="text" name="key" id="rn1" maxlength="5" style="width:100%">
+			</td>
+			<td class="submit">
+				<button type="button" onclick="hint(0)">提交</button>
+			</td>
+			<td id="hint1" class="hint">
+			</td>
+		</tr>
+		<!--~~~~~~~~~~~~~~~~~~~~~~pic2~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+		<tr>
+			<td class="pn">
+				<select id="pn2">
+					<option value="2-1">2-1</option>
+					<option value="2-2">2-2</option>
+					<option value="2-3">2-3</option>
+					<option value="2-4">2-4</option>
+					<option value="2-5">2-5</option>
+				</select>
+			</td>
+			<td class="rname">
+				<select id="rname2">
+					<option value="0">金寨路</option>
+					<option value="1">黄山路</option>
+					<option value="2">太湖路</option>
+					<option value="3">宿松路</option>
+					<option value="4">太湖支路</option>
+					<option value="5">肥西路</option>
+				</select>
+			</td>
+			<td class="inputbox">
+				<input type="text" name="key" id="rn2" maxlength="5" style="width:100%">
+			</td>
+			<td class="submit">
+				<button type="button" onclick="hint(1)">提交</button>
+			</td>
+			<td id="hint2" class="hint">
+			</td>
+		</tr>
+		<!--~~~~~~~~~~~~~~~~~~~~~~pic3~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+		<tr>
+			<td class="pn">
+				<select id="pn3">
+					<option value="3-1">3-1</option>
+					<option value="3-2">3-2</option>
+					<option value="3-3">3-3</option>
+					<option value="3-4">3-4</option>
+					<option value="3-5">3-5</option>
+				</select>
+			</td>
+			<td class="rname">
+				<select id="rname3">
+					<option value="0">金寨路</option>
+					<option value="1">黄山路</option>
+					<option value="2">太湖路</option>
+					<option value="3">宿松路</option>
+					<option value="4">太湖支路</option>
+					<option value="5">肥西路</option>
+				</select>
+			</td>
+			<td class="inputbox">
+				<input type="text" name="key" id="rn3" maxlength="5" style="width:100%">
+			</td>
+			<td class="submit">
+				<button type="button" onclick="hint(2)">提交</button>
+			</td>
+			<td id="hint3" class="hint">
+			</td>
+		</tr>
+		<!--~~~~~~~~~~~~~~~~~~~~~~pic4~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+		<tr>
+			<td class="pn">
+				<select id="pn4">
+					<option value="4-1">4-1</option>
+					<option value="4-2">4-2</option>
+					<option value="4-3">4-3</option>
+					<option value="4-4">4-4</option>
+					<option value="4-5">4-5</option>
+				</select>
+			</td>
+			<td class="rname">
+				<select id="rname4">
+					<option value="0">金寨路</option>
+					<option value="1">黄山路</option>
+					<option value="2">太湖路</option>
+					<option value="3">宿松路</option>
+					<option value="4">太湖支路</option>
+					<option value="5">肥西路</option>
+				</select>
+			</td>
+			<td class="inputbox">
+				<input type="text" name="key" id="rn4" maxlength="5" style="width:100%">
+			</td>
+			<td class="submit">
+				<button type="button" onclick="hint(3)">提交</button>
+			</td>
+			<td id="hint4" class="hint">
+			</td>
+		</tr>
+		<!--~~~~~~~~~~~~~~~~~~~~~~pic5~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+		<tr>
+			<td class="pn">
+				<select id="pn5">
+					<option value="5-1">5-1</option>
+					<option value="5-2">5-2</option>
+					<option value="5-3">5-3</option>
+					<option value="5-4">5-4</option>
+					<option value="5-5">5-5</option>
+				</select>
+			</td>
+			<td class="rname">
+				<select id="rname5">
+					<option value="0">金寨路</option>
+					<option value="1">黄山路</option>
+					<option value="2">太湖路</option>
+					<option value="3">宿松路</option>
+					<option value="4">太湖支路</option>
+					<option value="5">肥西路</option>
+				</select>
+			</td>
+			<td class="inputbox">
+				<input type="text" name="key" id="rn5" maxlength="5" style="width:100%">
+			</td>
+			<td class="submit">
+				<button type="button" onclick="hint(4)">提交</button>
+			</td>
+			<td id="hint5" class="hint">
+			</td>
+		</tr>
+		</table>
+	</div>
+	<div class="foot">
+		<p style="color:white;font-size:12px;">谢谢你们的参与！了解我们社团请戳<a id="zqs" href="https://mp.weixin.qq.com/s/M2vy_rDEWDQioMy41A6gig" target="_blank" style="color:white;text-decoration:underline;">自强社</a></p>
+	</div>
+
+</body>
+
+</html>
+
+
